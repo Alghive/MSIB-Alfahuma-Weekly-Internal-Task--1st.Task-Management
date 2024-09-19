@@ -31,9 +31,12 @@ class UserController extends ResourceController
     // [GET] /users: Show
     public function show($id = null)
     {
-        $data = $this->model->find($id);
-        if ($data) {
-            return $this->respond($data);
+        $user = $this->model->find($id);
+        if ($user) {
+            return $this->respond([
+                'status' => 'sukses, data ditemukan!',
+                'data' => $user
+            ]);
         } else {
             return $this->failNotFound('User tidak ditemukan!');
         }
