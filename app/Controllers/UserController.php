@@ -16,29 +16,58 @@ class UserController extends ResourceController
     {
         $data = [
             'username' => $this->request->getPost('username'),
-            'email' => $this->request->getPost('email'),
+            'email'    => $this->request->getPost('email'),
             'password' => password_hash($this->request->getPost('password'), PASSWORD_DEFAULT),
         ];
 
         if ($this->model->insert($data)) {
-            return $this->respondCreated($data);
-        } else {
-            return $this->failValidationErrors($this->model->errors());
-        };
-    }
+            $userId = $this->model->getInsertID();
+            $user = $this->model->find($userId);
 
+            $response = [
+                'status'  => 'sukses',
+                'message' => 'Akun Anda sudah dibuat!',
+                'data'    => [
+                    'username' => $user['username'],
+                    'email'    => $user['email'],
+                ]
+            ];
+
+            return $this->respondCreated(json_decode(json_encode($response), true));
+        } else {
+            $response = [
+                'status'  => 'gagal',
+                'message' => 'Validasi gagal, data tidak valid!',
+                'errors'  => $this->model->errors()
+            ];
+
+            return $this->failValidationErrors(json_decode(json_encode($response), true));
+        }
+    }
 
     // [GET] /users: Show
     public function show($id = null)
     {
         $user = $this->model->find($id);
+
         if ($user) {
-            return $this->respond([
-                'status' => 'sukses, data ditemukan!',
-                'data' => $user
-            ]);
+            $response = [
+                'status'  => 'sukses',
+                'message' => 'Data user ditemukan!',
+                'data'    => [
+                    'username' => $user['username'],
+                    'email'    => $user['email']
+                ]
+            ];
+
+            return $this->respond(json_decode(json_encode($response), true), 200);
         } else {
-            return $this->failNotFound('User tidak ditemukan!');
+            $response = [
+                'status'  => 'gagal',
+                'message' => 'User tidak ditemukan!'
+            ];
+
+            return $this->respond(json_decode(json_encode($response), true), 404);
         }
     }
 }

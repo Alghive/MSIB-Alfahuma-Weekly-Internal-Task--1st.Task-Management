@@ -8,7 +8,7 @@ class UserModel extends Model
 {
     protected $table = 'users';
     protected $primaryKey = 'id';
-    protected $allowedFields = ['username', 'email', 'password'];
+    protected $allowedFields = ['username', 'email', 'password', 'created_at'];
     protected $validationRules = [
         'username' => 'required|min_length[3]|is_unique[users.username]',
         'email'    => 'required|valid_email|is_unique[users.email]',
@@ -16,18 +16,18 @@ class UserModel extends Model
     ];
     protected $validationMessages = [
         'username' => [
-            'required' => 'Username is required',
-            'min_length' => 'Username must have at least 3 characters',
-            'is_unique' => 'This username already exists'
+            'required' => 'Nama pengguna diperlukan',
+            'min_length' => 'Nama pengguna harus memiliki minimal 3 karakter',
+            'is_unique' => 'Upss! Username ini sudah digunakan'
         ],
         'email' => [
-            'required' => 'Email is required',
-            'valid_email' => 'You must enter a valid email address',
-            'is_unique' => 'This email already exists'
+            'required' => 'Email pengguna diperlukan',
+            'valid_email' => 'Anda harus memasukkan alamat email yang valid',
+            'is_unique' => 'Upss! Username ini sudah digunakan'
         ],
         'password' => [
-            'required' => 'Password is required',
-            'min_length' => 'Password must have at least 6 characters'
+            'required' => 'Password pengguna diperlukan',
+            'min_length' => 'password harus memiliki minimal 6 karakter'
         ]
     ];
 }
