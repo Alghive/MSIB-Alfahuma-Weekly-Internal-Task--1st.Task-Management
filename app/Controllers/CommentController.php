@@ -42,12 +42,15 @@ class CommentController extends ResourceController
             ];
 
             return $this->respondCreated([
-                'status' => 'sukses',
+                'status' => 'Sukses',
                 'message' => "Hi {$user['username']}, komentar Anda berhasil ditambahkan!",
                 'data comment' => $response
             ]);
         } else {
-            return $this->failValidationErrors($this->model->errors());
+            return $this->respondCreated([
+                'status' => 'Gagal',
+                'message' => $this->model->errors()
+            ]);
         }
     }
 
@@ -81,7 +84,7 @@ class CommentController extends ResourceController
             }
 
             return $this->respond([
-                'status' => 'sukses',
+                'status' => 'Sukses',
                 'message' => "Komentar untuk task '{$task['title']}' berhasil ditemukan!",
                 'data comments' => $response
             ]);

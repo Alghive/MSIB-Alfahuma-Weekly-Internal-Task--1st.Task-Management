@@ -19,7 +19,7 @@ class TaskController extends ResourceController
             'user_id' => $this->request->getPost('user_id'),
             'title'   => $this->request->getPost('title'),
             'description' => $this->request->getPost('description'),
-            'status'  => 'pending',
+            'status'  => $this->request->getPost('status'),
         ];
 
         if (!$this->validate($this->model->validationRules)) {
@@ -48,14 +48,14 @@ class TaskController extends ResourceController
             ];
 
             return $this->respondCreated([
-                'status' => 'sukses',
+                'status' => 'Sukses',
                 'message' => 'Task berhasil dibuat!',
                 'username' => $user['username'],
                 'data task' => $response
             ]);
         } else {
             return $this->respond([
-                'status' => 'gagal',
+                'status' => 'Gagal',
                 'errors' => 'Gagal membuat task!',
             ], 500);
         }
@@ -75,7 +75,7 @@ class TaskController extends ResourceController
                 $user = $userModel->find($updatedTask['user_id']);
 
                 $response = [
-                    'status'  => 'sukses',
+                    'status'  => 'Sukses',
                     'message' => 'Task berhasil diupdate!',
                     'username' => $user['username'],
                     'data'    => [
@@ -90,7 +90,7 @@ class TaskController extends ResourceController
             } else {
 
                 $response = [
-                    'status'  => 'gagal',
+                    'status'  => 'Gagal',
                     'message' => 'Validasi gagal, data tidak valid!',
                     'errors'  => $this->model->errors()
                 ];
@@ -99,7 +99,7 @@ class TaskController extends ResourceController
             }
         } else {
             $response = [
-                'status'  => 'gagal',
+                'status'  => 'Gagal',
                 'message' => 'Task tidak ditemukan!'
             ];
 
@@ -118,7 +118,7 @@ class TaskController extends ResourceController
         if ($task) {
             if ($this->model->delete($id)) {
                 return $this->respond([
-                    'status' => 'sukses',
+                    'status' => 'Sukses',
                     'message' => 'Task berhasil dihapus'
                 ]);
             } else {
@@ -129,6 +129,7 @@ class TaskController extends ResourceController
         }
     }
 
+    // [GET] /tasks: Show
     public function show($id = null)
     {
         // Ambil data task berdasarkan ID
@@ -153,7 +154,7 @@ class TaskController extends ResourceController
 
                 // Return JSON response dengan status sukses
                 return $this->respond([
-                    'status'  => 'sukses',
+                    'status'  => 'Sukses',
                     'message' => "Task '{$task['title']}' berhasil ditemukan!",
                     'data'    => $response
                 ]);

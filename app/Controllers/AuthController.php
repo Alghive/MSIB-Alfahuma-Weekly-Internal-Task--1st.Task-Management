@@ -43,7 +43,7 @@ class AuthController extends ResourceController
         $token = JWT::encode($payload, $key, 'HS256');
 
         return $this->respond([
-            'status' => 'sukses',
+            'status' => 'Sukses',
             'message' => 'Login berhasil',
             'token' => $token,
             'data' => [

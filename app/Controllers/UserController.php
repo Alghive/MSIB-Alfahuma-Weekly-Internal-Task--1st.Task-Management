@@ -25,7 +25,7 @@ class UserController extends ResourceController
             $user = $this->model->find($userId);
 
             $response = [
-                'status'  => 'sukses',
+                'status'  => 'Sukses',
                 'message' => 'Akun Anda sudah dibuat!',
                 'data'    => [
                     'username' => $user['username'],
@@ -38,12 +38,11 @@ class UserController extends ResourceController
             return $this->respondCreated(json_decode(json_encode($response), true));
         } else {
             $response = [
-                'status'  => 'gagal',
+                'status'  => 'Gagal',
                 'message' => 'Validasi gagal, data tidak valid!',
                 'errors'  => $this->model->errors()
             ];
-
-            return $this->failValidationErrors(json_decode(json_encode($response), true));
+            return $this->respondCreated(json_decode(json_encode($response), true));
         }
     }
 
@@ -54,7 +53,7 @@ class UserController extends ResourceController
 
         if ($user) {
             $response = [
-                'status'  => 'sukses',
+                'status'  => 'Sukses',
                 'message' => 'Data user ditemukan!',
                 'data'    => [
                     'username' => $user['username'],
@@ -67,7 +66,7 @@ class UserController extends ResourceController
             return $this->respond(json_decode(json_encode($response), true), 200);
         } else {
             $response = [
-                'status'  => 'gagal',
+                'status'  => 'Gagal',
                 'message' => 'User tidak ditemukan!'
             ];
 

@@ -39,7 +39,7 @@ class TaskController extends ResourceController
 
 
             return $this->respond([
-                'status' => 'sukses',
+                'status' => 'Sukses',
                 'message' => "Komentar untuk task '{$task['title']}' berhasil ditemukan!",
                 'data' => $response
             ]);
@@ -65,8 +65,8 @@ class TaskController extends ResourceController
 
         if ($this->taskModel->delete($id)) {
             return $this->respond([
-                'status' => 'sukses',
-                'message' => 'Task dan komen berhasil dihapus'
+                'status' => 'Sukses',
+                'message' => "Task dan komen {$task['title']} berhasil dihapus"
             ]);
         } else {
             return $this->fail('Task gagal dihapus.');
