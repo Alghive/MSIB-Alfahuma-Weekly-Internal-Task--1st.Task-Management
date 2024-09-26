@@ -5,6 +5,8 @@ namespace App\Controllers;
 use App\Models\TaskModel;
 use CodeIgniter\RESTful\ResourceController;
 
+
+// Revisi weeklytask
 class TaskController extends ResourceController
 {
     protected $modelName = 'App\Models\TaskModel';
@@ -54,7 +56,7 @@ class TaskController extends ResourceController
         } else {
             return $this->respond([
                 'status' => 'gagal',
-                'message' => 'Gagal membuat task!',
+                'errors' => 'Gagal membuat task!',
             ], 500);
         }
     }
