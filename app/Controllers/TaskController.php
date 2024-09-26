@@ -132,38 +132,31 @@ class TaskController extends ResourceController
     // [GET] /tasks: Show
     public function show($id = null)
     {
-        // Ambil data task berdasarkan ID
         $task = $this->model->find($id);
 
         if ($task) {
-            // Ambil user berdasarkan user_id dari task
             $userModel = new \App\Models\UserModel();
             $user = $userModel->find($task['user_id']);
 
-            // Pastikan user ditemukan untuk menghindari error
             if ($user) {
-                // Gabungkan data task dengan username dan email dari user
                 $response = [
-                    'username'    => $user['username'],   // Tampilkan username dari user
-                    'email'       => $user['email'],      // Tampilkan email dari user
+                    'username'    => $user['username'],
+                    'email'       => $user['email'],
                     'title'       => $task['title'],
                     'description' => $task['description'],
                     'status'      => $task['status'],
-                    'waktu dibuat' => $task['created_at'], // Tampilkan tanggal dibuat
+                    'waktu dibuat' => $task['created_at'],
                 ];
 
-                // Return JSON response dengan status sukses
                 return $this->respond([
                     'status'  => 'Sukses',
                     'message' => "Task '{$task['title']}' berhasil ditemukan!",
                     'data'    => $response
                 ]);
             } else {
-                // Jika user tidak ditemukan
                 return $this->failNotFound('Pengguna tidak ditemukan');
             }
         } else {
-            // Jika task tidak ditemukan
             return $this->failNotFound('Task tidak ditemukan');
         }
     }
