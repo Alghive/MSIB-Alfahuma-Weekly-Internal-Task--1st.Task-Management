@@ -20,10 +20,20 @@ class TaskController extends ResourceController
             'status'  => 'pending',
         ];
 
+        if (!$this->validate($this->model->validationRules)) {
+
+            $errors = $this->validator->getErrors();
+
+            return $this->respond([
+                'status' => 'Gagal',
+                'message' => 'Gagal membuat task!',
+                'errors' => $errors
+            ], 400);
+        }
+
         if ($this->model->insert($data)) {
             $taskId = $this->model->getInsertID();
             $task = $this->model->find($taskId);
-
 
             $userModel = new \App\Models\UserModel();
             $user = $userModel->find($this->request->getPost('user_id'));
@@ -37,50 +47,15 @@ class TaskController extends ResourceController
 
             return $this->respondCreated([
                 'status' => 'sukses',
-                'message'  => "Task berhasil dibuat!",
+                'message' => 'Task berhasil dibuat!',
                 'username' => $user['username'],
                 'data task' => $response
             ]);
         } else {
-            return $this->failValidationErrors([
+            return $this->respond([
                 'status' => 'gagal',
                 'message' => 'Gagal membuat task!',
-                'errors' => $this->model->errors()
-            ]);
-        }
-    }
-
-
-    // [GET] /tasks: Show
-    public function show($id = null)
-    {
-        $data = $this->model->find($id);
-
-        if ($data) {
-            $userModel = new \App\Models\UserModel();
-            $user = $userModel->find($data['user_id']);
-
-            $response = [
-                'title'       => $data['title'],
-                'description' => $data['description'],
-                'status'      => $data['status'],
-                'waktu dibuat' => $data['created_at'],
-                'waktu diubah' => $data['updated_at'],
-            ];
-
-            return $this->respond([
-                'status' => 'sukses',
-                'message'  => "Task ditemukan!",
-                'username' => $user['username'],
-                'data task' => $response
-            ]);
-        } else {
-            $response = [
-                'status' => 'gagal',
-                'message' => 'Task tidak ditemukan.'
-            ];
-
-            return $this->respond(json_decode(json_encode($response), true), 404);
+            ], 500);
         }
     }
 

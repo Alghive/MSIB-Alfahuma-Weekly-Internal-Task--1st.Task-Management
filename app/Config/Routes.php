@@ -21,3 +21,5 @@ $routes->delete('tasks/(:num)', 'Api\TaskController::delete/$1');
 // Comments Routes
 $routes->post('tasks/(:num)/comments', 'CommentController::create');
 $routes->get('tasks/(:num)/comments', 'CommentController::show/$1');
+
+$routes->post('auth/login', 'AuthController::login');

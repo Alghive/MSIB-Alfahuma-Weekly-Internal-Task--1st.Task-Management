@@ -30,6 +30,8 @@ class UserController extends ResourceController
                 'data'    => [
                     'username' => $user['username'],
                     'email'    => $user['email'],
+                    'password' => $user["password"],
+                    'waktu dibuat' => $user["created_at"],
                 ]
             ];
 
@@ -56,7 +58,9 @@ class UserController extends ResourceController
                 'message' => 'Data user ditemukan!',
                 'data'    => [
                     'username' => $user['username'],
-                    'email'    => $user['email']
+                    'email'    => $user['email'],
+                    'password' => $user['password'],
+                    'waktu dibuat' => $user["created_at"],
                 ]
             ];
 

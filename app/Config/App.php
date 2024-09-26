@@ -95,6 +95,7 @@ class App extends BaseConfig
      */
     public string $defaultLocale = 'en';
 
+
     /**
      * --------------------------------------------------------------------------
      * Negotiate Locale

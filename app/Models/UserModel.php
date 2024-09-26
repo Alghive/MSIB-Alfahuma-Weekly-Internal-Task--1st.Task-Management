@@ -23,7 +23,7 @@ class UserModel extends Model
         'email' => [
             'required' => 'Email pengguna diperlukan',
             'valid_email' => 'Anda harus memasukkan alamat email yang valid',
-            'is_unique' => 'Upss! Username ini sudah digunakan'
+            'is_unique' => 'Upss! Email ini sudah digunakan'
         ],
         'password' => [
             'required' => 'Password pengguna diperlukan',

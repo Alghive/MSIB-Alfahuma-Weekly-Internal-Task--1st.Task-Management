@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\CommentModel;
 use CodeIgniter\RESTful\ResourceController;
 
+// new CommentModel();
 class CommentController extends ResourceController
 {
     protected $modelName = 'App\Models\CommentModel';
@@ -61,6 +62,7 @@ class CommentController extends ResourceController
         if (!$task) {
             return $this->failNotFound('Task tidak ditemukan!');
         }
+
         $comments = $this->model->where('task_id', $task_id)->findAll();
 
         if ($comments) {
