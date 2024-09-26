@@ -15,22 +15,21 @@ class TaskModel extends Model
         'user_id'     => 'required',
         'title'       => 'required|min_length[3]',
         'description' => 'required|min_length[5]',
-        'status'      => 'in_list[done,on progress,pending]', // Batasi status ke nilai tertentu
+        'status'      => 'in_list[done,on progress,pending]',
     ];
-
     protected $validationMessages = [
         'user_id' => [
             'required' => 'User ID diperlukan.',
         ],
         'title' => [
             'required' => 'Judul task diperlukan.',
-            'min_length' => 'Judul task harus memiliki minimal 3 karakter.'
+            'min_length' => 'Judul harus memiliki minimal 3 karakter.'
         ],
         'description' => [
             'required' => 'Deskripsi task diperlukan.',
-            'min_length' => 'Deskripsi task harus memiliki minimal 5 karakter.'
         ],
         'status' => [
+            'required' => 'Status task diperlukan.',
             'in_list' => 'Status hanya boleh diisi dengan salah satu dari: done, on progress, pending.'
         ]
     ];

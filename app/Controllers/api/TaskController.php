@@ -17,7 +17,40 @@ class TaskController extends ResourceController
         $this->commentModel = new CommentModel();
     }
 
-    // Method untuk menghapus task
+    public function show($id = null)
+    {
+
+        $task = $this->model->find($id);
+
+        if ($task) {
+
+            $userModel = new \App\Models\UserModel();
+            $user = $userModel->find($task['user_id']);
+
+
+            $response = [
+                'username'    => $user['username'],
+                'email'       => $task['email'],
+                'title'       => $task['title'],
+                'description' => $task['description'],
+                'status'      => $task['status'],
+                'waktu dibuat' => $task['created_at'],
+            ];
+
+
+            return $this->respond([
+                'status' => 'sukses',
+                'message' => "Komentar untuk task '{$task['title']}' berhasil ditemukan!",
+                'data' => $response
+            ]);
+        } else {
+
+            return $this->failNotFound('Task tidak ditemukan');
+        }
+    }
+
+
+
     public function delete($id = null)
     {
 

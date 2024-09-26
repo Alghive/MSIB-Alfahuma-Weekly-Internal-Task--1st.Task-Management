@@ -66,7 +66,6 @@ class TaskController extends ResourceController
         $data = $this->request->getRawInput();
 
         if ($this->model->find($id)) {
-
             if ($this->model->update($id, $data)) {
                 $updatedTask = $this->model->find($id);
 
@@ -85,15 +84,16 @@ class TaskController extends ResourceController
                     ]
                 ];
 
-                return $this->respond(json_decode(json_encode($response), true), 200);
+                return $this->respond($response, 200);
             } else {
+
                 $response = [
                     'status'  => 'gagal',
                     'message' => 'Validasi gagal, data tidak valid!',
                     'errors'  => $this->model->errors()
                 ];
 
-                return $this->failValidationErrors(json_decode(json_encode($response), true));
+                return $this->respond($response, 400);
             }
         } else {
             $response = [
@@ -101,9 +101,10 @@ class TaskController extends ResourceController
                 'message' => 'Task tidak ditemukan!'
             ];
 
-            return $this->respond(json_decode(json_encode($response), true), 404);
+            return $this->respond($response, 404);
         }
     }
+
 
 
 
@@ -122,6 +123,44 @@ class TaskController extends ResourceController
                 return $this->failServerError('Terjadi kesalahan saat menghapus task');
             }
         } else {
+            return $this->failNotFound('Task tidak ditemukan');
+        }
+    }
+
+    public function show($id = null)
+    {
+        // Ambil data task berdasarkan ID
+        $task = $this->model->find($id);
+
+        if ($task) {
+            // Ambil user berdasarkan user_id dari task
+            $userModel = new \App\Models\UserModel();
+            $user = $userModel->find($task['user_id']);
+
+            // Pastikan user ditemukan untuk menghindari error
+            if ($user) {
+                // Gabungkan data task dengan username dan email dari user
+                $response = [
+                    'username'    => $user['username'],   // Tampilkan username dari user
+                    'email'       => $user['email'],      // Tampilkan email dari user
+                    'title'       => $task['title'],
+                    'description' => $task['description'],
+                    'status'      => $task['status'],
+                    'waktu dibuat' => $task['created_at'], // Tampilkan tanggal dibuat
+                ];
+
+                // Return JSON response dengan status sukses
+                return $this->respond([
+                    'status'  => 'sukses',
+                    'message' => "Task '{$task['title']}' berhasil ditemukan!",
+                    'data'    => $response
+                ]);
+            } else {
+                // Jika user tidak ditemukan
+                return $this->failNotFound('Pengguna tidak ditemukan');
+            }
+        } else {
+            // Jika task tidak ditemukan
             return $this->failNotFound('Task tidak ditemukan');
         }
     }
