@@ -56,6 +56,7 @@ class TaskController extends ResourceController
 
         $task = $this->taskModel->find($id);
 
+
         if (!$task) {
             return $this->failNotFound('Task tidak berhasil ditemukan.');
         }
