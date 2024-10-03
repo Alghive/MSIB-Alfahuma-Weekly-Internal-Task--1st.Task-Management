@@ -18,8 +18,9 @@ class AuthFilter implements FilterInterface
             return \Config\Services::response()
                 ->setStatusCode(401)
                 ->setJSON([
-                    'status' => 'gagal',
-                    'message' => 'Token tidak ditemukan, harap login terlebih dahulu'
+                    'status' => 'Gagal',
+                    'error' => 'Unauthorized',
+                    'message' => 'Harap login terlebih dahulu'
                 ]);
         }
 
@@ -32,7 +33,8 @@ class AuthFilter implements FilterInterface
             return \Config\Services::response()
                 ->setStatusCode(401)
                 ->setJSON([
-                    'status' => 'gagal',
+                    'status' => 'Gagal',
+                    'error' => 'Unauthorized',
                     'message' => 'Format token tidak valid'
                 ]);
         }
@@ -45,7 +47,8 @@ class AuthFilter implements FilterInterface
             return \Config\Services::response()
                 ->setStatusCode(401)
                 ->setJSON([
-                    'status' => 'gagal',
+                    'status' => 'Gagal',
+                    'error' => 'Unauthorized',
                     'message' => 'Token tidak valid atau telah kadaluwarsa'
                 ]);
         }

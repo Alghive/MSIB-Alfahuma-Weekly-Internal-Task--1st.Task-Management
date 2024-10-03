@@ -41,6 +41,7 @@ class TaskController extends ResourceController
             $user = $userModel->find($this->request->getPost('user_id'));
 
             $response = [
+                'id task' => $task['id'],
                 'title'       => $task['title'],
                 'description' => $task['description'],
                 'status'      => $task['status'],
@@ -61,6 +62,38 @@ class TaskController extends ResourceController
         }
     }
 
+    // [GET] /tasks: Show
+    public function show($id = null)
+    {
+        $task = $this->model->find($id);
+
+        if ($task) {
+            $userModel = new \App\Models\UserModel();
+            $user = $userModel->find($task['user_id']);
+
+            if ($user) {
+                $response = [
+                    'username'    => $user['username'],
+                    'email'       => $user['email'],
+                    'id task' => $task['id'],
+                    'title'       => $task['title'],
+                    'description' => $task['description'],
+                    'status'      => $task['status'],
+                    'waktu dibuat' => $task['created_at'],
+                ];
+
+                return $this->respond([
+                    'status'  => 'Sukses',
+                    'message' => "Task '{$task['title']}' berhasil ditemukan!",
+                    'data'    => $response
+                ]);
+            } else {
+                return $this->failNotFound('Pengguna tidak ditemukan');
+            }
+        } else {
+            return $this->failNotFound('Task tidak ditemukan');
+        }
+    }
 
     // [PUT] /tasks: Update
     public function update($id = null)
@@ -79,10 +112,12 @@ class TaskController extends ResourceController
                     'message' => 'Task berhasil diupdate!',
                     'username' => $user['username'],
                     'data'    => [
+                        'id task' => $updatedTask['id'],
                         'title'       => $updatedTask['title'],
                         'description' => $updatedTask['description'],
                         'status'      => $updatedTask['status'],
-                        'tanggal update' => $updatedTask['updated_at'],
+                        'waktu dibuat' => $updatedTask['created_at'],
+                        'waktu diubah' => $updatedTask['updated_at'],
                     ]
                 ];
 
@@ -123,38 +158,6 @@ class TaskController extends ResourceController
                 ]);
             } else {
                 return $this->failServerError('Terjadi kesalahan saat menghapus task');
-            }
-        } else {
-            return $this->failNotFound('Task tidak ditemukan');
-        }
-    }
-
-    // [GET] /tasks: Show
-    public function show($id = null)
-    {
-        $task = $this->model->find($id);
-
-        if ($task) {
-            $userModel = new \App\Models\UserModel();
-            $user = $userModel->find($task['user_id']);
-
-            if ($user) {
-                $response = [
-                    'username'    => $user['username'],
-                    'email'       => $user['email'],
-                    'title'       => $task['title'],
-                    'description' => $task['description'],
-                    'status'      => $task['status'],
-                    'waktu dibuat' => $task['created_at'],
-                ];
-
-                return $this->respond([
-                    'status'  => 'Sukses',
-                    'message' => "Task '{$task['title']}' berhasil ditemukan!",
-                    'data'    => $response
-                ]);
-            } else {
-                return $this->failNotFound('Pengguna tidak ditemukan');
             }
         } else {
             return $this->failNotFound('Task tidak ditemukan');

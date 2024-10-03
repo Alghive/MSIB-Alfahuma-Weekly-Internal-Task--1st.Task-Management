@@ -16,7 +16,7 @@ use CodeIgniter\Filters\SecureHeaders;
 
 use CodeIgniter\Config\BaseConfig;
 
-class Filters extends BaseConfig
+class Filters extends BaseFilters
 {
     /**
      * Configures aliases for Filter classes to
@@ -73,7 +73,7 @@ class Filters extends BaseConfig
      */
     public array $globals = [
         'before' => [
-            'auth' => ['except' => ['auth/login', 'auth/register']],
+            'auth' => ['except' => ['auth/login', 'users']],
         ],
         'after'  => [
             'toolbar',

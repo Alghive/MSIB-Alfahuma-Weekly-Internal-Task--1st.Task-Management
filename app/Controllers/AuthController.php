@@ -30,7 +30,7 @@ class AuthController extends ResourceController
 
         $key = getenv('JWT_SECRET');
         $iat = time();
-        $exp = $iat + 60;
+        $exp = $iat + 3600;
 
         $payload = [
             'iat' => $iat,
@@ -47,6 +47,7 @@ class AuthController extends ResourceController
             'message' => 'Login berhasil',
             'token' => $token,
             'data' => [
+                'id user' => $user['id'],
                 'username' => $user['username'],
                 'email' => $user['email'],
                 'created_at' => $user['created_at']

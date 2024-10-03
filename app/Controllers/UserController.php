@@ -28,6 +28,7 @@ class UserController extends ResourceController
                 'status'  => 'Sukses',
                 'message' => 'Akun Anda sudah dibuat!',
                 'data'    => [
+                    'id user' => $user['id'],
                     'username' => $user['username'],
                     'email'    => $user['email'],
                     'password' => $user["password"],
@@ -56,6 +57,7 @@ class UserController extends ResourceController
                 'status'  => 'Sukses',
                 'message' => 'Data user ditemukan!',
                 'data'    => [
+                    'id user' => $user['id'],
                     'username' => $user['username'],
                     'email'    => $user['email'],
                     'password' => $user['password'],
