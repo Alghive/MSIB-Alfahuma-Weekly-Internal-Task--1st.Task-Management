@@ -98,7 +98,7 @@ class TaskController extends ResourceController
     // [PUT] /tasks: Update
     public function update($id = null)
     {
-        $data = $this->request->getRawInput();
+        $data = $this->request->getPost();
 
         if ($this->model->find($id)) {
             if ($this->model->update($id, $data)) {
@@ -141,9 +141,6 @@ class TaskController extends ResourceController
             return $this->respond($response, 404);
         }
     }
-
-
-
 
     // [DELETE] /tasks: Drop
     public function delete($id = null)

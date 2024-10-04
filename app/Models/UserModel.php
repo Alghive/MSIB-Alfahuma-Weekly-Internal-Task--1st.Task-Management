@@ -48,7 +48,7 @@ class UserModel extends Model
         ],
         'email' => [
             'required' => 'Email harus diisi!',
-            'valid_email' => 'Email harus memiliki minimal 6 karakter',
+            'valid_email' => 'Anda harus memasukkan alamat email yang valid',
             'is_unique' => 'Maaf, email ini sudah digunakan'
         ],
         'password' => [

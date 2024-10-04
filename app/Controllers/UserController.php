@@ -14,16 +14,21 @@ class UserController extends ResourceController
     // Endpoint: 
     public function create()
     {
+        // $data = [
+        //     'username' => $this->request->getPost('username'),
+        //     'email'    => $this->request->getPost('email'),
+        //     'password' => password_hash($this->request->getPost('password'), PASSWORD_DEFAULT),
+        // ];
+
         $data = [
             'username' => $this->request->getPost('username'),
-            'email'    => $this->request->getPost('email'),
+            'email' => $this->request->getPost('email'),
             'password' => password_hash($this->request->getPost('password'), PASSWORD_DEFAULT),
         ];
 
         if ($this->model->insert($data)) {
             $userId = $this->model->getInsertID();
             $user = $this->model->find($userId);
-
             $response = [
                 'status'  => 'Sukses',
                 'message' => 'Akun Anda sudah dibuat!',
