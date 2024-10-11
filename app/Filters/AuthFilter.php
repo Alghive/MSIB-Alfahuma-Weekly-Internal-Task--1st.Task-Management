@@ -11,20 +11,16 @@ class AuthFilter implements FilterInterface
 {
     public function before(RequestInterface $request, $arguments = null)
     {
-        // Daftar endpoint yang tidak memerlukan token
-        $excludedRoutes = ['auth/login', 'auth/logout']; // Logout tidak perlu token
+        $excludedRoutes = ['auth/login', 'auth/logout'];
 
-        // Ambil URI yang sedang diakses
         $currentRoute = $request->getUri()->getPath();
 
-        // Cek apakah route saat ini ada di daftar yang dikecualikan
         foreach ($excludedRoutes as $route) {
             if (strpos($currentRoute, $route) !== false) {
-                return; // Skip pengecekan token jika route ada dalam daftar
+                return;
             }
         }
 
-        // Lanjutkan dengan pengecekan token hanya untuk route yang lain
         $authHeader = $request->getServer('HTTP_AUTHORIZATION');
 
         if (!$authHeader) {
@@ -36,7 +32,6 @@ class AuthFilter implements FilterInterface
                 ]);
         }
 
-        // Pisahkan Bearer dari token
         $token = null;
         if (preg_match('/Bearer\s(\S+)/', $authHeader, $matches)) {
             $token = $matches[1];
@@ -51,10 +46,9 @@ class AuthFilter implements FilterInterface
                 ]);
         }
 
-        // Cek token di tabel token_session
         $tokenModel = new TokenSessionModel();
         $tokenData = $tokenModel->where('token', $token)
-            ->where('status', 1)  // Cek token aktif
+            ->where('status', 1)
             ->first();
 
         if (!$tokenData) {
@@ -66,7 +60,6 @@ class AuthFilter implements FilterInterface
                 ]);
         }
 
-        // Cek apakah token masih berlaku (belum kedaluwarsa)
         $currentTime = time();
         if (strtotime($tokenData['valid_until']) < $currentTime) {
             return \Config\Services::response()
@@ -77,16 +70,12 @@ class AuthFilter implements FilterInterface
                 ]);
         }
 
-        // Lanjutkan request jika token valid
         return;
     }
 
 
 
-    public function after(RequestInterface $request, ResponseInterface $response, $arguments = null)
-    {
-        // Tidak perlu diproses di sini
-    }
+    public function after(RequestInterface $request, ResponseInterface $response, $arguments = null) {}
 
     // Helper function untuk membuat response unauthorized
     private function unauthorizedResponse($message)
