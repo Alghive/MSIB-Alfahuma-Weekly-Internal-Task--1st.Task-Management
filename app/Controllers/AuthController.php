@@ -59,18 +59,13 @@ class AuthController extends ResourceController
                 'username' => $user['username'],
                 'token' => $token,
                 'status' => 'valid',
-                'valid_until' => date('Y-m-d H:i:s', strtotime('+1 minute')),
+                'masa aktif token' => '1 Jam',
+                'valid_until' => date('Y-m-d H:i:s', strtotime('+1 hour')),
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ]
         ]);
     }
-
-
-
-
-
-
 
     public function logout($userId)
     {
@@ -96,15 +91,7 @@ class AuthController extends ResourceController
 
             return $this->respond([
                 'status' => 'Sukses',
-                'message' => 'Logout berhasil',
-                'data' => [
-                    'user_id' => $userId,
-                    'username' => $user['username'],
-                    'status_token' => 'invalid',
-                    'valid_until' => $tokenData['valid_until'],
-                    'created_at' => $tokenData['created_at'],
-                    'updated_at' => $tokenData['updated_at']
-                ]
+                'message' => 'Logout berhasil'
             ]);
         } catch (\Exception $e) {
             log_message('error', 'Error during logout: ' . $e->getMessage());
