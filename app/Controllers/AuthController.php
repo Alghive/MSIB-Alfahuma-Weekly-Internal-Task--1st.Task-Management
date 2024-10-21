@@ -25,6 +25,12 @@ class AuthController extends ResourceController
             return $this->failUnauthorized('Username atau password salah');
         }
 
+        session()->set('user_id', $user['id']);
+
+        $tokenModel->where('user_id', $user['id'])->where('status', 1)
+            ->set('status', 0)
+            ->update();
+
         $payload = [
             'user_id' => $user['id'],
             'exp' => time() + 3600
@@ -67,35 +73,25 @@ class AuthController extends ResourceController
         ]);
     }
 
-    public function logout($userId)
+
+    public function logout()
     {
+        $userId = session()->get('user_id');
+
+        if (!$userId) {
+            return $this->failUnauthorized('User tidak ditemukan atau tidak aktif.');
+        }
+
         $tokenModel = new TokenSessionModel();
-        $userModel = new UserModel();
+        $tokenModel->where('user_id', $userId)
+            ->set('status', 0)
+            ->update();
 
-        $tokenData = $tokenModel->where('user_id', $userId)
-            ->where('status', 1)
-            ->first();
+        session()->destroy();
 
-        if (!$tokenData) {
-            return $this->failNotFound('User atau token tidak ditemukan');
-        }
-
-        $user = $userModel->find($userId);
-
-        if (!$user) {
-            return $this->failNotFound('User tidak ditemukan');
-        }
-
-        try {
-            $tokenModel->update($tokenData['id'], ['status' => 0]);
-
-            return $this->respond([
-                'status' => 'Sukses',
-                'message' => 'Logout berhasil'
-            ]);
-        } catch (\Exception $e) {
-            log_message('error', 'Error during logout: ' . $e->getMessage());
-            return $this->failServerError('Terjadi kesalahan saat logout.');
-        }
+        return $this->respond([
+            'status' => 'Sukses',
+            'message' => 'Logout berhasil'
+        ]);
     }
 }

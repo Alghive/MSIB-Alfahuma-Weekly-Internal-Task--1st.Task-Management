@@ -25,4 +25,4 @@ $routes->get('tasks/(:num)/comments', 'CommentController::show/$1');
 // Auth Routes
 $routes->post('auth/login', 'AuthController::login');
 // $routes->post('auth/logout', 'AuthController::logout');
-$routes->post('auth/logout/(:num)', 'AuthController::logout/$1');
+$routes->post('auth/logout', 'AuthController::logout');
