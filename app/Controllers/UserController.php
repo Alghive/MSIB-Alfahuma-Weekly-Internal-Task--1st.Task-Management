@@ -33,11 +33,11 @@ class UserController extends ResourceController
                 'status'  => 'Sukses',
                 'message' => 'Akun Anda sudah dibuat!',
                 'data'    => [
-                    'id user' => $user['id'],
+                    'id_user' => $user['id'],
                     'username' => $user['username'],
                     'email'    => $user['email'],
                     'password' => $user["password"],
-                    'waktu dibuat' => $user["created_at"],
+                    'created_at' => $user["created_at"],
                 ]
             ];
 
@@ -60,13 +60,13 @@ class UserController extends ResourceController
         if ($user) {
             $response = [
                 'status'  => 'Sukses',
-                'message' => 'Data user ditemukan!',
+                'message' => 'Data pengguna ditemukan!',
                 'data'    => [
-                    'id user' => $user['id'],
+                    #'id_user' => $user['id'],
                     'username' => $user['username'],
                     'email'    => $user['email'],
                     'password' => $user['password'],
-                    'waktu dibuat' => $user["created_at"],
+                    'created_at' => $user["created_at"],
                 ]
             ];
 

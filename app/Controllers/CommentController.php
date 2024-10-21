@@ -35,16 +35,16 @@ class CommentController extends ResourceController
 
             $response = [
                 'task_id'    => $comment['task_id'],
-                'judul task' => $task['title'],
+                'task_title' => $task['title'],
                 'username'   => $user['username'],
                 'comment'    => $comment['comment'],
-                'waktu dibuat' => $comment['created_at'],
+                'created_at' => $comment['created_at'],
             ];
 
             return $this->respondCreated([
                 'status' => 'Sukses',
                 'message' => "Hi {$user['username']}, komentar Anda berhasil ditambahkan!",
-                'data comment' => $response
+                'data_comment' => $response
             ]);
         } else {
             return $this->respondCreated([
@@ -77,16 +77,16 @@ class CommentController extends ResourceController
 
                 $response[] = [
                     'username'    => $user['username'],
-                    'judul task' => $task['title'],
+                    'task_title' => $task['title'],
                     'comment'     => $comment['comment'],
-                    'waktu dibuat' => $comment['created_at'],
+                    'created_at' => $comment['created_at'],
                 ];
             }
 
             return $this->respond([
                 'status' => 'Sukses',
                 'message' => "Komentar untuk task '{$task['title']}' berhasil ditemukan!",
-                'data comments' => $response
+                'data_comments' => $response
             ]);
         } else {
             return $this->failNotFound("Komentar untuk task '{$task['title']}' tidak ditemukan!");

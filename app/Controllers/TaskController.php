@@ -41,18 +41,18 @@ class TaskController extends ResourceController
             $user = $userModel->find($this->request->getPost('user_id'));
 
             $response = [
-                'id task' => $task['id'],
+                // 'id_task' => $task['id'],
                 'title'       => $task['title'],
                 'description' => $task['description'],
                 'status'      => $task['status'],
-                'waktu dibuat' => $task['created_at'],
+                'created_at' => $task['created_at'],
             ];
 
             return $this->respondCreated([
                 'status' => 'Sukses',
                 'message' => 'Task berhasil dibuat!',
                 'username' => $user['username'],
-                'data task' => $response
+                'data_task' => $response
             ]);
         } else {
             return $this->respond([
@@ -73,13 +73,13 @@ class TaskController extends ResourceController
 
             if ($user) {
                 $response = [
-                    'username'    => $user['username'],
-                    'email'       => $user['email'],
-                    'id task' => $task['id'],
+                    # 'username'    => $user['username'],
+                    # 'email'       => $user['email'],
+                    // 'id_task' => $task['id'],
                     'title'       => $task['title'],
                     'description' => $task['description'],
-                    'status'      => $task['status'],
-                    'waktu dibuat' => $task['created_at'],
+                    'task_status'      => $task['status'],
+                    'created_at' => $task['created_at'],
                 ];
 
                 return $this->respond([
@@ -110,14 +110,14 @@ class TaskController extends ResourceController
                 $response = [
                     'status'  => 'Sukses',
                     'message' => 'Task berhasil diupdate!',
-                    'username' => $user['username'],
+                    # 'username' => $user['username'],
                     'data'    => [
-                        'id task' => $updatedTask['id'],
+                        # 'id_task' => $updatedTask['id'],
                         'title'       => $updatedTask['title'],
                         'description' => $updatedTask['description'],
-                        'status'      => $updatedTask['status'],
-                        'waktu dibuat' => $updatedTask['created_at'],
-                        'waktu diubah' => $updatedTask['updated_at'],
+                        'task_status'      => $updatedTask['status'],
+                        'created_at' => $updatedTask['created_at'],
+                        'updated_at' => $updatedTask['updated_at'],
                     ]
                 ];
 
