@@ -9,6 +9,7 @@ return [
     'valid_email'   => 'Email yang dimasukkan harus valid.',
     'matches'       => '{field} harus sesuai dengan {param}.',
     'in_list'       => '{field} harus salah satu dari: {param}.',
+    'capitalFirst' => '{field} harus diawali dengan huruf kapital!',
 
     // Pesan khusus untuk task
     'title'         => 'Judul harus memiliki minimal 3 karakter.',

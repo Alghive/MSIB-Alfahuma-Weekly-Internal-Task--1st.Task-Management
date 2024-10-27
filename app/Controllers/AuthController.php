@@ -64,8 +64,8 @@ class AuthController extends ResourceController
                 'user_id' => $user['id'],
                 'username' => $user['username'],
                 'token' => $token,
-                'status' => 'valid',
-                'masa aktif token' => '1 Jam',
+                'token_status' => 'valid',
+                'token_active_period' => '1 Jam',
                 'valid_until' => date('Y-m-d H:i:s', strtotime('+1 hour')),
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
