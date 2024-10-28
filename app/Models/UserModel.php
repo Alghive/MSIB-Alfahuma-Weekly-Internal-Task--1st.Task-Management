@@ -6,40 +6,14 @@ use CodeIgniter\Model;
 
 class UserModel extends Model
 {
-    // protected $table = 'users';
-    // protected $primaryKey = 'id';
-    // protected $allowedFields = ['username', 'email', 'password', 'created_at'];
-    // protected $validationRules = [
-    //     'username' => 'required|min_length[3]|is_unique[users.username]',
-    //     'email'    => 'required|valid_email|is_unique[users.email]',
-    //     'password' => 'required|min_length[6]',
-    // ];
-    // protected $validationMessages = [
-    //     'username' => [
-    //         'required' => 'Nama pengguna diperlukan',
-    //         'min_length' => 'Nama pengguna harus memiliki minimal 3 karakter',
-    //         'is_unique' => 'Upss! Username ini sudah digunakan'
-    //     ],
-    //     'email' => [
-    //         'required' => 'Email pengguna diperlukan',
-    //         'valid_email' => 'Anda harus memasukkan alamat email yang valid',
-    //         'is_unique' => 'Upss! Email ini sudah digunakan'
-    //     ],
-    //     'password' => [
-    //         'required' => 'Password pengguna diperlukan',
-    //         'min_length' => 'Password harus memiliki minimal 6 karakter'
-    //     ]
-    // ];
-
     protected $table = 'users';
     protected $primaryKey = 'id';
     protected $allowedFields = ['username', 'email', 'password', 'created_at', 'first_name', 'last_name'];
+    protected $useTimestamps = true;
     protected $validationRules = [
         'username' => 'required|min_length[3]|is_unique[users.username]',
         'email' => 'required|valid_email|is_unique[users.email]',
         'password' => 'required|min_length[6]',
-        // 'first_name' => 'required|capitalFirst',
-        // 'last_name' => 'required|capitalFirst',
     ];
 
     protected $validationMessages = [
@@ -67,8 +41,8 @@ class UserModel extends Model
         // ]
     ];
 
-    protected function capitalFirst(string $str): bool
-    {
-        return ctype_upper($str[0]);
-    }
+    // protected function capitalFirst(string $str): bool
+    // {
+    //     return ctype_upper($str[0]);
+    // }
 }

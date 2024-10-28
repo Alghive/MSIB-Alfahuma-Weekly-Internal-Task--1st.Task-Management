@@ -7,13 +7,11 @@ use App\Models\UserModel;
 use App\Models\TaskModel;
 use CodeIgniter\RESTful\ResourceController;
 
-// new CommentModel();
 class CommentController extends ResourceController
 {
     protected $modelName = 'App\Models\CommentModel';
     protected $format    = 'json';
 
-    // [POST] /tasks: Create
     public function create()
     {
         $task_id = $this->request->getPost('task_id');
@@ -26,10 +24,8 @@ class CommentController extends ResourceController
 
         if ($this->model->insert($data)) {
             $taskModel = new \App\Models\TaskModel();
-            $task = $taskModel->find($task_id); // Mengambil data task
-
-            // Mengambil deadline dari task
-            $deadline = $task['deadline']; // Ambil deadline
+            $task = $taskModel->find($task_id);
+            $deadline = $task['deadline'];
 
             $commentId = $this->model->getInsertID();
             $comment = $this->model->find($commentId);
@@ -61,13 +57,8 @@ class CommentController extends ResourceController
         }
     }
 
-
-
-
-    // [GET] /Comments by Task Id: Show
     public function show($task_id = null)
     {
-        // Ambil parameter dari query string
         $commentText = $this->request->getGet('comment');
         $username = $this->request->getGet('username');
         $fullname = $this->request->getGet('fullname');
@@ -76,17 +67,14 @@ class CommentController extends ResourceController
         $userModel = new UserModel();
         $taskModel = new TaskModel();
 
-        // Inisialisasi query builder
         $builder = $commentModel->builder()
             ->join('users', 'comments.user_id = users.id', 'left')
             ->join('tasks', 'comments.task_id = tasks.id', 'left');
 
-        // Jika task_id disediakan, tambahkan filter untuk task_id
         if ($task_id !== null) {
             $builder->where('comments.task_id', $task_id);
         }
 
-        // Filter berdasarkan `comment`, `username`, atau `fullname` jika ada
         if ($commentText) {
             $builder->like('comments.comment', $commentText, 'both');
         }
@@ -94,7 +82,6 @@ class CommentController extends ResourceController
             $builder->like('users.username', $username, 'both');
         }
         if ($fullname) {
-            // Pencarian fullname menggunakan CONCAT untuk menggabungkan first_name dan last_name
             $builder->groupStart()
                 ->like('users.first_name', $fullname, 'both')
                 ->orLike('users.last_name', $fullname, 'both')
@@ -102,7 +89,6 @@ class CommentController extends ResourceController
                 ->groupEnd();
         }
 
-        // Eksekusi query dengan menambahkan field deadline
         $comments = $builder->select('
             comments.user_id,
             comments.task_id,
@@ -112,11 +98,10 @@ class CommentController extends ResourceController
             comments.comment, 
             tasks.deadline AS deadline,
             comments.created_at,
-            comments.updated_at') // Menambahkan field deadline
+            comments.updated_at')
             ->get()
             ->getResultArray();
 
-        // Cek apakah ada hasil
         if ($comments) {
             $response = [
                 'status' => 'Sukses',

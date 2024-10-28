@@ -19,27 +19,20 @@ namespace App\Controllers;
 use App\Models\TaskModel;
 use CodeIgniter\RESTful\ResourceController;
 
-
-// Revisi weeklytask
 class TaskController extends ResourceController
 {
     protected $modelName = 'App\Models\TaskModel';
     protected $format    = 'json';
 
-    // [POST] /tasks: Create
     public function create()
     {
-        // Ambil input deadline
         $deadlineInput = $this->request->getPost('deadline');
 
-        // Cek apakah input dalam format tanggal/bulan/tahun
         if (preg_match('/\d{2}\/\d{2}\/\d{4}/', $deadlineInput)) {
-            // Jika formatnya tanggal/bulan/tahun, konversi ke format datetime
             $deadlineDate = \DateTime::createFromFormat('d/m/Y', $deadlineInput);
 
 
             if ($deadlineDate) {
-                // Set jam ke 23:59:00
                 $deadline = $deadlineDate->format('Y-m-d 23:59:00');
             } else {
                 return $this->respond([
@@ -48,7 +41,6 @@ class TaskController extends ResourceController
                 ], 400);
             }
         } else {
-            // Jika input menggunakan format deskriptif (hari, minggu, bulan, tahun)
             $intervalMap = [
                 'hari' => 'day',
                 'minggu' => 'week',
@@ -56,31 +48,26 @@ class TaskController extends ResourceController
                 'tahun' => 'year'
             ];
 
-            $now = time(); // Waktu sekarang
+            $now = time();
 
-            // Regex untuk menemukan angka dan satuan waktu (hari, minggu, bulan, tahun)
             preg_match_all('/(\d+)\s*(hari|minggu|bulan|tahun)/', $deadlineInput, $matches, PREG_SET_ORDER);
 
-            // Tambahkan interval satuan waktu sesuai input user
             foreach ($matches as $match) {
-                $jumlah = (int) $match[1]; // Ambil angka
-                $satuan = $intervalMap[$match[2]]; // Ambil satuan waktu
+                $jumlah = (int) $match[1];
+                $satuan = $intervalMap[$match[2]];
 
-                // Tambahkan waktu sesuai interval ke waktu saat ini
                 $now = strtotime("+$jumlah $satuan", $now);
             }
 
-            // Set jam deadline ke 23:59:00 secara manual sebelum menyimpan ke database
             $deadline = date('Y-m-d 23:59:00', $now);
         }
 
-        // Data task
         $data = [
             'user_id'    => $this->request->getPost('user_id'),
             'title'      => $this->request->getPost('title'),
             'description' => $this->request->getPost('description'),
             'status'     => $this->request->getPost('status'),
-            'deadline'   => $deadline, // Masukkan deadline dengan waktu 23:59
+            'deadline'   => $deadline,
         ];
 
         if (!$this->validate($this->model->validationRules)) {
@@ -107,7 +94,7 @@ class TaskController extends ResourceController
                 'title'       => $task['title'],
                 'description' => $task['description'],
                 'status'      => $task['status'],
-                'deadline'    => $task['deadline'], // Tampilkan deadline dengan waktu 23:59
+                'deadline'    => $task['deadline'],
                 'created_at'  => $task['created_at'],
                 'updated_at' => $task['updated_at']
             ];
@@ -125,11 +112,6 @@ class TaskController extends ResourceController
         }
     }
 
-
-
-    /**
-     * Fungsi untuk konversi format bahasa Indonesia ke detik
-     */
     private function parseDeadline($input)
     {
         $timeUnits = [
@@ -159,7 +141,6 @@ class TaskController extends ResourceController
     }
 
 
-    // [GET] /tasks: Show
     public function show($id = null)
     {
         if ($id !== null) {
@@ -281,16 +262,12 @@ class TaskController extends ResourceController
         }
     }
 
-    // Fungsi untuk mem-parsing rentang deadline
     private function parseDeadlineRange($input)
     {
-        // Definisikan variabel untuk menghitung total hari
         $totalDays = 0;
 
-        // Pisahkan input berdasarkan spasi
         $parts = preg_split('/\s+/', trim($input));
 
-        // Loop untuk menghitung total hari
         for ($i = 0; $i < count($parts); $i += 2) {
             $value = (int)$parts[$i];
             $unit = strtolower($parts[$i + 1] ?? '');
@@ -298,18 +275,16 @@ class TaskController extends ResourceController
             if ($unit === 'hari') {
                 $totalDays += $value;
             } elseif ($unit === 'minggu') {
-                $totalDays += $value * 7; // 1 minggu = 7 hari
+                $totalDays += $value * 7;
             } elseif ($unit === 'bulan') {
-                $totalDays += $value * 30; // Asumsi 1 bulan = 30 hari
+                $totalDays += $value * 30;
             } elseif ($unit === 'tahun') {
-                $totalDays += $value * 365; // Asumsi 1 tahun = 365 hari
+                $totalDays += $value * 365;
             }
         }
 
-        // Hitung tanggal sekarang
         $now = new \DateTime();
         $startDeadline = $now->modify("+$totalDays days")->format('Y-m-d H:i:s');
-        // Menghitung tanggal akhir sebagai tanggal sekarang
         $endDeadline = $now->modify("+$totalDays days")->format('Y-m-d H:i:s');
 
         return [

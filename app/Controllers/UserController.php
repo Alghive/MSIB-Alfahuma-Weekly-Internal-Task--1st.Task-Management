@@ -10,12 +10,10 @@ class UserController extends ResourceController
     protected $modelName = 'App\Models\UserModel';
     protected $format    = 'json';
 
-    // Create a new user
     public function create()
     {
         $validation = \Config\Services::validation();
 
-        // Set validation rules for first_name and last_name
         $validation->setRules([
             'first_name' => [
                 'label' => 'First Name',
@@ -71,13 +69,14 @@ class UserController extends ResourceController
         ], 400);
     }
 
-    // Show a user or list of users based on filters
     public function show($id = null)
     {
         if ($id !== null) {
             $user = $this->model->find($id);
-            return $user
-                ? $this->respond([
+
+            if ($user) {
+
+                return $this->respond([
                     'status'  => 'Sukses',
                     'message' => 'Data pengguna ditemukan!',
                     'data'    => [
@@ -87,10 +86,21 @@ class UserController extends ResourceController
                         'email'      => $user['email'],
                         'created_at' => $user['created_at'],
                     ]
-                ])
-                : $this->respond(['status' => 'Gagal', 'message' => 'User tidak ditemukan!'], 404);
+                ]);
+            } else {
+                return $this->respond([
+                    'status'  => 'Gagal',
+                    'message' => 'User tidak ditemukan!'
+                ], 404);
+            }
+        } else {
+            return $this->respond([
+                'status'  => 'Gagal',
+                'message' => 'ID pengguna harus diberikan!'
+            ], 400);
         }
     }
+
 
     public function filterUsers()
     {
@@ -100,7 +110,6 @@ class UserController extends ResourceController
             'fullname' => $this->request->getGet('fullname')
         ];
 
-        // Query berdasarkan filter
         if ($filters['email']) {
             $users = $this->model->like('email', $filters['email'], 'both')->findAll();
         } elseif ($filters['username']) {
